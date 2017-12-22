@@ -12,7 +12,7 @@ class IdeasDisplay extends React.Component {
   }
 
   fetchIdea(id) {
-    axios.get(`api/v1/idea/${id}`)
+    axios.get(`api/v1/idea/${id}.json`)
       .then(response => {
         this.setState({ idea: response.data })
       })
@@ -34,6 +34,11 @@ class IdeasDisplay extends React.Component {
   componentDidMount() {
     this.setIdeaIdFromQueryString(this.props.location.search)
     this.fetchIdea(this.ideaId)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setIdeaIdFromQueryString(nextProps.location.search)
+    this.fetchIdea(this.quoteId)
   }
 
   render() {
