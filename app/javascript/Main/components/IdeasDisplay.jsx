@@ -12,6 +12,7 @@ class IdeasDisplay extends React.Component {
   }
 
   fetchIdea(id) {
+    id = Number(queryString.parse(id).idea) || 3
     axios.get(`api/v1/idea/${id}.json`)
       .then(response => {
         this.setState({ idea: response.data })
@@ -21,24 +22,12 @@ class IdeasDisplay extends React.Component {
       })
   }
 
-  setIdeaIdFromQueryString(qs) {
-    this.qsParams = queryString.parse(qs)
-    if (this.qsParams.idea) {
-      this.ideaId = Number(this.qsParams.idea)
-    } else {
-      this.ideaId = 3
-      this.props.history.push(`/?idea=${this.ideaId}`)
-    }
-  }
-
   componentDidMount() {
-    this.setIdeaIdFromQueryString(this.props.location.search)
-    this.fetchIdea(this.ideaId)
+    this.fetchIdea(this.props.location.search)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setIdeaIdFromQueryString(nextProps.location.search)
-    this.fetchIdea(this.quoteId)
+    this.fetchIdea(nextProps.location.search)
   }
 
   render() {
@@ -46,13 +35,13 @@ class IdeasDisplay extends React.Component {
 
     return (
       <div>
-        <Link to={`/?idea=${nextIdeaId}`}>Next</Link>
         <h3>{this.state.idea.title}</h3>
         <p>
           {this.state.idea.description}<br />
           Likes: {this.state.idea.likes}<br />
           Dislikes: {this.state.idea.dislikes}
         </p>
+        <Link to={`/?idea=${nextIdeaId}`}>Next</Link>
       </div>
     )
   }
